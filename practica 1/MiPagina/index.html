@@ -3,26 +3,58 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Tortugas Marinas de México</title>
+    <title>Jaibol2</title>
 </head>
 
 <body>
     <header>
-        <h1>Tortugas Marinas de México</h1>
+        <h1>Jaibol2</h1>
         <nav>
             <ul>
                 <li><a href="index.html">Inicio</a></li>
-                <li><a href="html/laud.html">Tortuga Laúd</a></li>
-                <li><a href="html/caguama.html">Tortuga Caguama</a></li>
+                <li><a href="html/bebidas.html">Bebidas</a></li>
+                <li><a href="html/comida.html">Comida</a></li>
             </ul>
         </nav>
     </header>
 
-    <h2>Bienvenido</h2>
-    <p>Este sitio está dedicado a difundir información sobre las tortugas marinas que habitan las costas de México, con un enfoque en dos especies: la tortuga laúd y la tortuga caguama.</p>
+    <h2>Bienvenido a Jaibol2</h2>
+    <p>Tu cantina de confianza: bebidas preparadas al momento y botana para acompañar. Explora nuestro menú de bebidas y comida desde el menú de arriba.</p>
 
-<footer>
-    <p>&copy; 2026 Mi Página</p>
-</footer>
+    <h2>Así se prepara un buen coctel</h2>
+    <video controls width="480">
+        <source src="video/coctel.mp4" type="video/mp4">
+        Tu navegador no soporta el elemento de video.
+    </video>
+    <p><small>Video: "The Best Way To Shake A Cocktail" por Drinks Made Easy, <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a> (fragmento)</small></p>
+
+    <h2>Ambiente</h2>
+    <audio controls>
+        <source src="audio/musica-bar.mp3" type="audio/mpeg">
+        Tu navegador no soporta el elemento de audio.
+    </audio>
+    <p><small>Música: "Hot Swing" por Kevin MacLeod, <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a></small></p>
+
+    <h2>Reserva tu mesa</h2>
+    <form>
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required>
+
+        <label for="fecha">Fecha:</label>
+        <input type="date" id="fecha" name="fecha" required>
+
+        <label for="hora">Hora:</label>
+        <input type="time" id="hora" name="hora" required>
+
+        <label for="personas">Número de personas:</label>
+        <input type="number" id="personas" name="personas" min="1" max="20" required>
+
+        <button type="submit">Reservar</button>
+    </form>
+
+    <footer>
+        <p>&copy; 2026 Jaibol2</p>
+    </footer>
 </body>
+
 </html>
