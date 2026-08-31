@@ -25,7 +25,8 @@ h1, h2, h3 {
 }
 
 .tarjeta {
-    background-color: #1a1a1a;
+    background-color: #f2f2f2;
+    border: 3px solid #1a1a1a;
     width: 220px;
     border-radius: 8px;
     overflow: hidden;
@@ -46,10 +47,12 @@ h1, h2, h3 {
 
 .tarjeta h3 {
     background-color: transparent;
+    color: #1a1a1a;
     padding: 0.5rem;
 }
 
 .tarjeta p {
+    color: #555555;
     padding: 0 0.75rem 1rem;
     font-size: 0.9rem;
 }
