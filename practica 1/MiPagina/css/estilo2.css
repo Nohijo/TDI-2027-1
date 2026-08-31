@@ -1,5 +1,11 @@
 /* Hoja de estilos para bebidas.html y comida.html */
 
 body {
-    background-color: red;
+    background-color: #a13d3d;
+}
+
+h1, h2, h3 {
+    color: white;
+    background-color: #1a1a1a;
+    padding: 0.5rem 1rem;
 }
