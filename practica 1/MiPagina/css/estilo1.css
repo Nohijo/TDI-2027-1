@@ -9,3 +9,30 @@ h1, h2, h3 {
     background-color: #1a1a1a;
     padding: 0.5rem 1rem;
 }
+
+.seccion {
+    max-width: 700px;
+    margin: 0 auto 2rem;
+    padding: 0 1rem;
+}
+
+.credito {
+    font-size: 0.8rem;
+    color: #2a2a2a;
+}
+
+#video-coctel {
+    border-radius: 8px;
+    display: block;
+}
+
+#reserva {
+    background-color: #1a1a1a;
+    color: white;
+    padding: 1rem;
+    border-radius: 8px;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    max-width: 300px;
+}

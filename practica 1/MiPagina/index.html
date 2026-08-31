@@ -19,39 +19,47 @@
         </nav>
     </header>
 
-    <h2>Bienvenido a Jaibol2</h2>
-    <p>Tu cantina de confianza: bebidas preparadas al momento y botana para acompañar. Explora nuestro menú de bebidas y comida desde el menú de arriba.</p>
+    <div class="seccion">
+        <h2>Bienvenido a Jaibol2</h2>
+        <p>Tu cantina de confianza: bebidas preparadas al momento y botana para acompañar. Explora nuestro menú de bebidas y comida desde el menú de arriba.</p>
+    </div>
 
-    <h2>Así se prepara un buen coctel</h2>
-    <video controls width="480">
-        <source src="video/coctel.mp4" type="video/mp4">
-        Tu navegador no soporta el elemento de video.
-    </video>
-    <p><small>Video: "The Best Way To Shake A Cocktail" por Drinks Made Easy, <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a> (fragmento)</small></p>
+    <div class="seccion">
+        <h2>Así se prepara un buen coctel</h2>
+        <video id="video-coctel" controls width="480">
+            <source src="video/coctel.mp4" type="video/mp4">
+            Tu navegador no soporta el elemento de video.
+        </video>
+        <p class="credito">Video: "The Best Way To Shake A Cocktail" por Drinks Made Easy, <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a> (fragmento)</p>
+    </div>
 
-    <h2>Ambiente</h2>
-    <audio controls>
-        <source src="audio/musica-bar.mp3" type="audio/mpeg">
-        Tu navegador no soporta el elemento de audio.
-    </audio>
-    <p><small>Música: "Hot Swing" por Kevin MacLeod, <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a></small></p>
+    <div class="seccion">
+        <h2>Ambiente</h2>
+        <audio controls>
+            <source src="audio/musica-bar.mp3" type="audio/mpeg">
+            Tu navegador no soporta el elemento de audio.
+        </audio>
+        <p class="credito">Música: "Hot Swing" por Kevin MacLeod, <a href="https://creativecommons.org/licenses/by/3.0/">CC BY 3.0</a></p>
+    </div>
 
-    <h2>Reserva tu mesa</h2>
-    <form>
-        <label for="nombre">Nombre:</label>
-        <input type="text" id="nombre" name="nombre" required>
+    <div class="seccion">
+        <h2>Reserva tu mesa</h2>
+        <form id="reserva">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
 
-        <label for="fecha">Fecha:</label>
-        <input type="date" id="fecha" name="fecha" required>
+            <label for="fecha">Fecha:</label>
+            <input type="date" id="fecha" name="fecha" required>
 
-        <label for="hora">Hora:</label>
-        <input type="time" id="hora" name="hora" required>
+            <label for="hora">Hora:</label>
+            <input type="time" id="hora" name="hora" required>
 
-        <label for="personas">Número de personas:</label>
-        <input type="number" id="personas" name="personas" min="1" max="20" required>
+            <label for="personas">Número de personas:</label>
+            <input type="number" id="personas" name="personas" min="1" max="20" required>
 
-        <button type="submit">Reservar</button>
-    </form>
+            <button type="submit">Reservar</button>
+        </form>
+    </div>
 
     <footer>
         <p>&copy; 2026 Jaibol2</p>

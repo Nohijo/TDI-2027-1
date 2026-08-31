@@ -9,3 +9,47 @@ h1, h2, h3 {
     background-color: #1a1a1a;
     padding: 0.5rem 1rem;
 }
+
+#menu-bebidas,
+#menu-comida {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 1rem;
+}
+
+.menu-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+    justify-content: center;
+}
+
+.tarjeta {
+    background-color: #1a1a1a;
+    width: 220px;
+    border-radius: 8px;
+    overflow: hidden;
+    text-align: center;
+    transition: transform 0.2s ease;
+}
+
+.tarjeta:hover {
+    transform: scale(1.04);
+}
+
+.tarjeta img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    display: block;
+}
+
+.tarjeta h3 {
+    background-color: transparent;
+    padding: 0.5rem;
+}
+
+.tarjeta p {
+    padding: 0 0.75rem 1rem;
+    font-size: 0.9rem;
+}
