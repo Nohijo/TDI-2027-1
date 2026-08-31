@@ -2,12 +2,17 @@
 
 body {
     background-color: #c1302f;
+    margin: 0;
 }
 
 h1, h2, h3 {
     color: white;
     background-color: #1a1a1a;
     padding: 0.5rem 1rem;
+}
+
+header h1 {
+    margin: 0;
 }
 
 #menu-bebidas,
@@ -28,14 +33,14 @@ h1, h2, h3 {
     background-color: #f2f2f2;
     border: 3px solid #1a1a1a;
     width: 220px;
-    border-radius: 8px;
-    overflow: hidden;
+    border-radius: 15px;
+    overflow: hidden; /*para que la imagen  no se salga*/
     text-align: center;
-    transition: transform 0.2s ease;
+    transition: transform 0.2s ease; /*cuanto dura */
 }
 
 .tarjeta:hover {
-    transform: scale(1.04);
+    transform: scale(1.04);/*cuanto se va a agrandar*/
 }
 
 .tarjeta img {
