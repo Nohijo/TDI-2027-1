@@ -1,4 +1,4 @@
-/* Hoja de estilos para index.html */
+/* hoja de estilos para inicio */
 
 body {
     background-color: #121212;
@@ -10,7 +10,7 @@ h1, h2, h3 {
     color: white;
     background-color: #1a1a1a;
     padding: 0.5rem 1rem;
-    border-bottom: 3px solid #c1302f;
+    border-bottom: 3px solid #c1302f;/*de aqui viene esa linea roja*/
 }
 
 header h1 {
@@ -66,4 +66,11 @@ nav ul li a:hover {
     flex-direction: column;
     gap: 0.5rem;
     max-width: 300px;
+}
+
+footer {
+    background-color: #1a1a1a;
+    color: white;
+    text-align: center;
+    padding: 1rem;
 }

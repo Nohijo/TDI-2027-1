@@ -44,7 +44,9 @@ nav ul li a:hover {
 #menu-comida {
     max-width: 1000px;
     margin: 0 auto;
-    padding: 1rem;
+    padding: 1.5rem 1rem;
+    background-color: #1a1a1a;
+    border-radius: 25px;
 }
 
 .menu-grid {
@@ -79,6 +81,7 @@ nav ul li a:hover {
     background-color: transparent;
     color: #1a1a1a;
     padding: 0.5rem;
+    /*border-bottom: none; */
 }
 
 .tarjeta p {
@@ -107,4 +110,11 @@ nav ul li a:hover {
 
 .btn-ver-mas:hover {
     background-color: #333333;
+}
+
+footer {
+    background-color: #1a1a1a;
+    color: white;
+    text-align: center;
+    padding: 1rem;
 }
