@@ -4,3 +4,13 @@ MiPagina_referencia/
 # Sistema
 .DS_Store
 Thumbs.db
+
+# Maven / Java
+target/
+*.class
+
+# NetBeans
+nbproject/private/
+nbactions.xml
+.nb-gradle/
+build/

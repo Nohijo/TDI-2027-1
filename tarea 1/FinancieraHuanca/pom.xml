@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>mx.unam.ciencias.tdi</groupId>
+    <artifactId>FinancieraHuanca</artifactId>
+    <version>1.0</version>
+    <packaging>war</packaging>
+
+    <name>FinancieraHuanca</name>
+    <description>Tarea 1 - Servlet de solicitud de credito (Financiera Huanca)</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Bytecode para JDK 17+ (Tomcat 10.1 necesita Java 11 o superior). -->
+        <maven.compiler.release>17</maven.compiler.release>
+        <failOnMissingWebXml>false</failOnMissingWebXml>
+    </properties>
+
+    <dependencies>
+        <!--
+            API de Servlets de Jakarta EE 10 (paquete jakarta.servlet.*).
+            scope "provided": la aporta el servidor (Tomcat 10.1), no se empaqueta.
+
+            Si tu Tomcat fuera la version 9, cambia este bloque por:
+                <groupId>javax.servlet</groupId>
+                <artifactId>javax.servlet-api</artifactId>
+                <version>4.0.1</version>
+            y reemplaza en CreditoServlet.java los imports "jakarta.servlet" por "javax.servlet".
+        -->
+        <dependency>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>6.0.0</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <!-- El WAR se llamara FinancieraHuanca.war -> contexto /FinancieraHuanca -->
+        <finalName>FinancieraHuanca</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.13.0</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.4.0</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>
