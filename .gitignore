@@ -14,3 +14,7 @@ nbproject/private/
 nbactions.xml
 .nb-gradle/
 build/
+
+# Entregables (se generan a partir del proyecto, no se versionan)
+*.zip
+tarea */MarquezCristovalMiguelAngel_*/
