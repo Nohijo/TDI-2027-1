@@ -14,43 +14,39 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- Bytecode para JDK 17+ (Tomcat 10.1 necesita Java 11 o superior). -->
-        <maven.compiler.release>17</maven.compiler.release>
+        <!-- Java 8 (para Tomcat 7). No se usa sintaxis mas nueva. -->
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <failOnMissingWebXml>false</failOnMissingWebXml>
     </properties>
 
     <dependencies>
         <!--
-            API de Servlets de Jakarta EE 10 (paquete jakarta.servlet.*).
-            scope "provided": la aporta el servidor (Tomcat 10.1), no se empaqueta.
-
-            Si tu Tomcat fuera la version 9, cambia este bloque por:
-                <groupId>javax.servlet</groupId>
-                <artifactId>javax.servlet-api</artifactId>
-                <version>4.0.1</version>
-            y reemplaza en CreditoServlet.java los imports "jakarta.servlet" por "javax.servlet".
+            API de Servlets 3.0 = la que implementa Apache Tomcat 7.
+            Paquete javax.servlet.*  (NO jakarta).
+            scope "provided": la aporta Tomcat, no se empaqueta en el .war.
         -->
         <dependency>
-            <groupId>jakarta.servlet</groupId>
-            <artifactId>jakarta.servlet-api</artifactId>
-            <version>6.0.0</version>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.0.1</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>
 
     <build>
-        <!-- El WAR se llamara FinancieraHuanca.war -> contexto /FinancieraHuanca -->
+        <!-- El .war se llamara FinancieraHuanca.war -> contexto /FinancieraHuanca -->
         <finalName>FinancieraHuanca</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.13.0</version>
+                <version>3.8.1</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>3.4.0</version>
+                <version>3.3.2</version>
             </plugin>
         </plugins>
     </build>

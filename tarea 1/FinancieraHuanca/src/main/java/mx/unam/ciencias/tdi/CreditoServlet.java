@@ -10,37 +10,34 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 import java.util.Map;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Tarea 1 - Tecnologias para Desarrollos en Internet.
  *
- * Servlet de "Financiera Huanca". Un mismo servlet atiende dos momentos:
+ * Servlet de "Financiera Huanca". El mismo servlet atiende dos momentos:
  *
- *   1. doGet()  -> el navegador PIDE la pagina: se devuelve la PRIMERA vista,
+ *   1. doGet()  -> el navegador PIDE la pagina: devuelve la PRIMERA vista,
  *                  el formulario de solicitud de credito.
- *   2. doPost() -> el usuario ENVIA el formulario: se leen los campos, se
- *                  calculan la cuota mensual y la fecha de vencimiento y se
- *                  devuelve la SEGUNDA vista con todo lo capturado.
+ *   2. doPost() -> el usuario ENVIA el formulario: lee los campos, calcula la
+ *                  cuota mensual y la fecha de vencimiento, y devuelve la
+ *                  SEGUNDA vista con todo lo capturado.
  *
- * Es el mismo patron del ejemplo de clase "Forma_de_Compra".
+ * Mismo patron que el ejemplo de clase "Forma_de_Compra".
  *
- * La anotacion @WebServlet asocia la clase con la URL /credito; dentro del
- * contexto de la aplicacion se llega en:
- *     http://localhost:8080/FinancieraHuanca/credito
+ * Compatible con Apache Tomcat 7 (Servlet 3.0, paquete javax.servlet) y Java 8.
+ * El mapeo a la URL /credito esta en WEB-INF/web.xml.
  */
-@WebServlet(name = "CreditoServlet", urlPatterns = {"/credito"})
 public class CreditoServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-    /* ===================================================================== */
-    /*  PRIMERA VISTA: el formulario                                          */
-    /* ===================================================================== */
+    /* ================================================================= */
+    /*  PRIMERA VISTA: el formulario                                      */
+    /* ================================================================= */
     @Override
     protected void doGet(HttpServletRequest peticion, HttpServletResponse respuesta)
             throws ServletException, IOException {
@@ -48,114 +45,89 @@ public class CreditoServlet extends HttpServlet {
         respuesta.setContentType("text/html;charset=UTF-8");
 
         // getContextPath() devuelve "/FinancieraHuanca": se antepone a las rutas
-        // para que el CSS, el JS y el action funcionen aunque cambie el nombre
+        // para que el CSS, el JS y el "action" funcionen aunque cambie el nombre
         // con el que el servidor publique la aplicacion.
         String ctx = peticion.getContextPath();
 
-        String html = """
-                <!DOCTYPE html>
-                <html lang="es">
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1">
-                    <title>Financiera Huanca - Solicitud de credito</title>
-                    <link rel="stylesheet" href="__CTX__/css/estilo.css">
-                </head>
-                <body>
-                <form class="ventana" method="post" action="__CTX__/credito">
+        PrintWriter out = respuesta.getWriter();
+        try {
+            out.println("<!DOCTYPE html>");
+            out.println("<html lang='es'>");
+            out.println("<head>");
+            out.println("  <meta charset='UTF-8'>");
+            out.println("  <meta name='viewport' content='width=device-width, initial-scale=1'>");
+            out.println("  <title>Financiera Huanca - Solicitud de credito</title>");
+            out.println("  <link rel='stylesheet' href='" + ctx + "/css/estilo.css'>");
+            out.println("</head>");
+            out.println("<body>");
 
-                    <div class="barra-titulo">
-                        <span class="titulo">@ Financiera Huanca</span>
-                        <span class="cerrar">&#10005;</span>
-                    </div>
+            out.println("<form class='ventana' method='post' action='" + ctx + "/credito'>");
 
-                    <div class="tabs">
-                        <button type="button" class="tab" id="tab-personales"
-                                onclick="mostrarPestana('panel-personales', this)">Datos personales</button>
-                        <button type="button" class="tab activo" id="tab-credito"
-                                onclick="mostrarPestana('panel-credito', this)">Datos del credito</button>
-                    </div>
+            out.println("  <div class='barra-titulo'>");
+            out.println("    <span class='titulo'>@ Financiera Huanca</span>");
+            out.println("    <span class='cerrar'>&#10005;</span>");
+            out.println("  </div>");
 
-                    <!-- Pestana 1: datos personales -->
-                    <div class="panel" id="panel-personales">
-                        <div class="fila">
-                            <label for="nombres">Nombres</label>
-                            <input type="text" id="nombres" name="nombres">
-                        </div>
-                        <div class="fila">
-                            <label for="apellidos">Apellidos</label>
-                            <input type="text" id="apellidos" name="apellidos">
-                        </div>
-                        <div class="fila">
-                            <label for="dni">DNI</label>
-                            <input type="text" id="dni" name="dni" maxlength="8">
-                        </div>
-                        <div class="fila">
-                            <label for="correo">Correo</label>
-                            <input type="email" id="correo" name="correo">
-                        </div>
-                    </div>
+            out.println("  <div class='tabs'>");
+            out.println("    <button type='button' class='tab' id='tab-personales' onclick='mostrarPestana(\"panel-personales\", this)'>Datos personales</button>");
+            out.println("    <button type='button' class='tab activo' id='tab-credito' onclick='mostrarPestana(\"panel-credito\", this)'>Datos del credito</button>");
+            out.println("  </div>");
 
-                    <!-- Pestana 2: datos del credito (la que aparece en el enunciado) -->
-                    <div class="panel activo" id="panel-credito">
+            // ---- Pestana 1: datos personales ----
+            out.println("  <div class='panel' id='panel-personales'>");
+            out.println("    <div class='fila'><label for='nombres'>Nombres</label><input type='text' id='nombres' name='nombres'></div>");
+            out.println("    <div class='fila'><label for='apellidos'>Apellidos</label><input type='text' id='apellidos' name='apellidos'></div>");
+            out.println("    <div class='fila'><label for='dni'>DNI</label><input type='text' id='dni' name='dni' maxlength='8'></div>");
+            out.println("    <div class='fila'><label for='correo'>Correo</label><input type='email' id='correo' name='correo'></div>");
+            out.println("  </div>");
 
-                        <div class="fila">
-                            <span class="boton-etiqueta">Fecha</span>
-                            <input type="date" id="fecha" name="fecha">
-                        </div>
+            // ---- Pestana 2: datos del credito (la que aparece en el enunciado) ----
+            out.println("  <div class='panel activo' id='panel-credito'>");
 
-                        <div class="fila fila-moneda">
-                            <span class="grupo-titulo">Moneda</span>
-                            <label class="radio"><input type="radio" name="moneda" value="soles" checked> Soles (S/.)</label>
-                            <label class="radio"><input type="radio" name="moneda" value="dolares"> Dolares (US$)</label>
-                        </div>
+            out.println("    <div class='fila'>");
+            out.println("      <span class='boton-etiqueta'>Fecha</span>");
+            out.println("      <input type='date' id='fecha' name='fecha'>");
+            out.println("    </div>");
 
-                        <div class="fila fila-triple">
-                            <span>
-                                <label for="monto">Monto</label>
-                                <input type="number" id="monto" name="monto" step="0.01" min="0">
-                            </span>
-                            <span>
-                                <label for="periodo">Periodo</label>
-                                <input type="number" id="periodo" name="periodo" min="1" class="corto"> meses
-                            </span>
-                        </div>
+            out.println("    <div class='fila fila-moneda'>");
+            out.println("      <span class='grupo-titulo'>Moneda</span>");
+            out.println("      <label class='radio'><input type='radio' name='moneda' value='soles' checked> Soles (S/.)</label>");
+            out.println("      <label class='radio'><input type='radio' name='moneda' value='dolares'> Dolares (US$)</label>");
+            out.println("    </div>");
 
-                        <div class="fila">
-                            <button type="button" class="boton" onclick="calcularCuota()">Cuota</button>
-                            <input type="text" id="cuota" name="cuota" readonly placeholder="se calcula al enviar">
-                        </div>
+            out.println("    <div class='fila fila-triple'>");
+            out.println("      <span><label for='monto'>Monto</label><input type='number' id='monto' name='monto' step='0.01' min='0'></span>");
+            out.println("      <span><label for='periodo'>Periodo</label><input type='number' id='periodo' name='periodo' min='1' class='corto'> meses</span>");
+            out.println("    </div>");
 
-                        <div class="fila fila-triple">
-                            <span>
-                                <span class="boton-etiqueta">TEA</span>
-                                <input type="number" id="tea" name="tea" step="0.01" min="0" class="corto"> %
-                            </span>
-                            <span>
-                                <button type="button" class="boton" onclick="calcularVencimiento()">Fecha vencimiento</button>
-                                <input type="text" id="fechaVencimiento" name="fechaVencimiento" readonly placeholder="se calcula al enviar">
-                            </span>
-                        </div>
+            out.println("    <div class='fila'>");
+            out.println("      <button type='button' class='boton' onclick='calcularCuota()'>Cuota</button>");
+            out.println("      <input type='text' id='cuota' name='cuota' readonly placeholder='se calcula al enviar'>");
+            out.println("    </div>");
 
-                        <div class="fila fila-aceptar">
-                            <button type="submit" class="boton boton-aceptar">ACEPTAR</button>
-                        </div>
-                    </div>
-                </form>
+            out.println("    <div class='fila fila-triple'>");
+            out.println("      <span><span class='boton-etiqueta'>TEA</span><input type='number' id='tea' name='tea' step='0.01' min='0' class='corto'> %</span>");
+            out.println("      <span><button type='button' class='boton' onclick='calcularVencimiento()'>Fecha vencimiento</button><input type='text' id='fechaVencimiento' name='fechaVencimiento' readonly placeholder='se calcula al enviar'></span>");
+            out.println("    </div>");
 
-                <script src="__CTX__/js/financiera.js"></script>
-                </body>
-                </html>
-                """.replace("__CTX__", ctx);
+            out.println("    <div class='fila fila-aceptar'>");
+            out.println("      <button type='submit' class='boton boton-aceptar'>ACEPTAR</button>");
+            out.println("    </div>");
 
-        try (PrintWriter salida = respuesta.getWriter()) {
-            salida.print(html);
+            out.println("  </div>");
+            out.println("</form>");
+
+            out.println("<script src='" + ctx + "/js/financiera.js'></script>");
+            out.println("</body>");
+            out.println("</html>");
+        } finally {
+            out.close();
         }
     }
 
-    /* ===================================================================== */
-    /*  SEGUNDA VISTA: los campos capturados + los calculos                   */
-    /* ===================================================================== */
+    /* ================================================================= */
+    /*  SEGUNDA VISTA: los campos capturados + los calculos               */
+    /* ================================================================= */
     @Override
     protected void doPost(HttpServletRequest peticion, HttpServletResponse respuesta)
             throws ServletException, IOException {
@@ -187,13 +159,13 @@ public class CreditoServlet extends HttpServlet {
         String vencCalc  = calcularVencimiento(fecha, periodo);
 
         // ---- 3) Armar las tablas de la respuesta ----
-        Map<String, String> personales = new LinkedHashMap<>();
+        Map<String, String> personales = new LinkedHashMap<String, String>();
         personales.put("Nombres", nombres);
         personales.put("Apellidos", apellidos);
         personales.put("DNI", dni);
         personales.put("Correo", correo);
 
-        Map<String, String> credito = new LinkedHashMap<>();
+        Map<String, String> credito = new LinkedHashMap<String, String>();
         credito.put("Fecha", fecha);
         credito.put("Moneda", monedaTexto);
         credito.put("Monto", simbolo + " " + monto);
@@ -202,61 +174,52 @@ public class CreditoServlet extends HttpServlet {
         credito.put("Cuota (enviada por el formulario)", cuotaForm);
         credito.put("Fecha de vencimiento (enviada por el formulario)", vencForm);
 
-        Map<String, String> calculos = new LinkedHashMap<>();
+        Map<String, String> calculos = new LinkedHashMap<String, String>();
         calculos.put("Cuota mensual (sistema frances)", cuotaCalc);
         calculos.put("Fecha de vencimiento", vencCalc);
 
-        String html = """
-                <!DOCTYPE html>
-                <html lang="es">
-                <head>
-                    <meta charset="UTF-8">
-                    <meta name="viewport" content="width=device-width, initial-scale=1">
-                    <title>Financiera Huanca - Resumen de la solicitud</title>
-                    <link rel="stylesheet" href="__CTX__/css/estilo.css">
-                </head>
-                <body>
-                <div class="ventana">
-
-                    <div class="barra-titulo">
-                        <span class="titulo">@ Financiera Huanca</span>
-                        <span class="cerrar">&#10005;</span>
-                    </div>
-
-                    <div class="panel activo">
-                        <h2 id="titulo-resumen">Solicitud registrada</h2>
-                        <p>Estos son los datos que recibio el servlet:</p>
-
-                        __PERSONALES__
-                        __CREDITO__
-                        __CALCULOS__
-
-                        <div class="fila fila-aceptar">
-                            <a class="boton boton-aceptar" href="__CTX__/credito">Nueva solicitud</a>
-                        </div>
-                    </div>
-                </div>
-                </body>
-                </html>
-                """
-                .replace("__PERSONALES__", tabla("Datos personales capturados", personales))
-                .replace("__CREDITO__", tabla("Datos del credito capturados", credito))
-                .replace("__CALCULOS__", tabla("Calculos realizados por el servlet", calculos))
-                .replace("__CTX__", ctx);
-
-        try (PrintWriter salida = respuesta.getWriter()) {
-            salida.print(html);
+        PrintWriter out = respuesta.getWriter();
+        try {
+            out.println("<!DOCTYPE html>");
+            out.println("<html lang='es'>");
+            out.println("<head>");
+            out.println("  <meta charset='UTF-8'>");
+            out.println("  <meta name='viewport' content='width=device-width, initial-scale=1'>");
+            out.println("  <title>Financiera Huanca - Resumen de la solicitud</title>");
+            out.println("  <link rel='stylesheet' href='" + ctx + "/css/estilo.css'>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<div class='ventana'>");
+            out.println("  <div class='barra-titulo'>");
+            out.println("    <span class='titulo'>@ Financiera Huanca</span>");
+            out.println("    <span class='cerrar'>&#10005;</span>");
+            out.println("  </div>");
+            out.println("  <div class='panel activo'>");
+            out.println("    <h2 id='titulo-resumen'>Solicitud registrada</h2>");
+            out.println("    <p>Estos son los datos que recibio el servlet:</p>");
+            out.println(tabla("Datos personales capturados", personales));
+            out.println(tabla("Datos del credito capturados", credito));
+            out.println(tabla("Calculos realizados por el servlet", calculos));
+            out.println("    <div class='fila fila-aceptar'>");
+            out.println("      <a class='boton boton-aceptar' href='" + ctx + "/credito'>Nueva solicitud</a>");
+            out.println("    </div>");
+            out.println("  </div>");
+            out.println("</div>");
+            out.println("</body>");
+            out.println("</html>");
+        } finally {
+            out.close();
         }
     }
 
-    /* ===================================================================== */
-    /*  METODOS AUXILIARES                                                    */
-    /* ===================================================================== */
+    /* ================================================================= */
+    /*  METODOS AUXILIARES                                                */
+    /* ================================================================= */
 
     /** Devuelve el parametro ya recortado, o "(no capturado)" si vino vacio. */
     private static String leer(HttpServletRequest peticion, String nombre) {
         String valor = peticion.getParameter(nombre);
-        if (valor == null || valor.isBlank()) {
+        if (valor == null || valor.trim().isEmpty()) {
             return "(no capturado)";
         }
         return valor.trim();
@@ -265,7 +228,7 @@ public class CreditoServlet extends HttpServlet {
     /** Construye una tabla HTML a partir de un mapa etiqueta -> valor. */
     private static String tabla(String titulo, Map<String, String> filas) {
         StringBuilder sb = new StringBuilder();
-        sb.append("<table class=\"resultado\"><caption>").append(esc(titulo)).append("</caption>");
+        sb.append("    <table class='resultado'><caption>").append(esc(titulo)).append("</caption>");
         for (Map.Entry<String, String> fila : filas.entrySet()) {
             sb.append("<tr><th>").append(esc(fila.getKey()))
               .append("</th><td>").append(esc(fila.getValue())).append("</td></tr>");
@@ -282,7 +245,8 @@ public class CreditoServlet extends HttpServlet {
         return texto.replace("&", "&amp;")
                     .replace("<", "&lt;")
                     .replace(">", "&gt;")
-                    .replace("\"", "&quot;");
+                    .replace("\"", "&quot;")
+                    .replace("'", "&#39;");
     }
 
     /**
@@ -325,7 +289,7 @@ public class CreditoServlet extends HttpServlet {
     /** Fecha de vencimiento = fecha de desembolso + periodo (en meses). */
     private static String calcularVencimiento(String fechaTxt, String periodoTxt) {
         try {
-            LocalDate desembolso = LocalDate.parse(fechaTxt); // <input type="date"> -> yyyy-MM-dd
+            LocalDate desembolso = LocalDate.parse(fechaTxt); // <input type='date'> -> yyyy-MM-dd
             int meses = Integer.parseInt(periodoTxt);
             LocalDate vencimiento = desembolso.plusMonths(meses);
             return vencimiento.format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
