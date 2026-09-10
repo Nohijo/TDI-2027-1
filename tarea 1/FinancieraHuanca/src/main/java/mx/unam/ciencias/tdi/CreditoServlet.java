@@ -117,12 +117,61 @@ public class CreditoServlet extends HttpServlet {
             out.println("  </div>");
             out.println("</form>");
 
-            out.println("<script src='" + ctx + "/js/financiera.js'></script>");
+            escribeScript(out);
             out.println("</body>");
             out.println("</html>");
         } finally {
             out.close();
         }
+    }
+
+    /**
+     * Escribe el bloque <script> del formulario: cambio de pestanas y una vista
+     * previa de la cuota y de la fecha de vencimiento. Va embebido (no como
+     * archivo .js aparte) para que el servlet quede autocontenido.
+     */
+    private static void escribeScript(PrintWriter out) {
+        out.println("<script>");
+        out.println("function mostrarPestana(idPanel, boton) {");
+        out.println("  var paneles = document.querySelectorAll('.panel');");
+        out.println("  for (var i = 0; i < paneles.length; i++) paneles[i].classList.remove('activo');");
+        out.println("  var tabs = document.querySelectorAll('.tab');");
+        out.println("  for (var j = 0; j < tabs.length; j++) tabs[j].classList.remove('activo');");
+        out.println("  document.getElementById(idPanel).classList.add('activo');");
+        out.println("  boton.classList.add('activo');");
+        out.println("}");
+        out.println("function tasaMensualDesdeTEA(tea) {");
+        out.println("  return Math.pow(1 + tea / 100, 1 / 12) - 1;");
+        out.println("}");
+        out.println("function simboloMoneda() {");
+        out.println("  var radios = document.getElementsByName('moneda');");
+        out.println("  for (var k = 0; k < radios.length; k++) {");
+        out.println("    if (radios[k].checked && radios[k].value === 'dolares') return 'US$';");
+        out.println("  }");
+        out.println("  return 'S/.';");
+        out.println("}");
+        out.println("function calcularCuota() {");
+        out.println("  var monto = parseFloat(document.getElementById('monto').value);");
+        out.println("  var tea = parseFloat(document.getElementById('tea').value);");
+        out.println("  var meses = parseInt(document.getElementById('periodo').value, 10);");
+        out.println("  var salida = document.getElementById('cuota');");
+        out.println("  if (!(monto > 0) || !(meses > 0) || isNaN(tea)) { salida.value = 'Faltan datos'; return; }");
+        out.println("  var i = tasaMensualDesdeTEA(tea);");
+        out.println("  var cuota = (i === 0) ? monto / meses : monto * i / (1 - Math.pow(1 + i, -meses));");
+        out.println("  salida.value = simboloMoneda() + ' ' + cuota.toFixed(2);");
+        out.println("}");
+        out.println("function calcularVencimiento() {");
+        out.println("  var fecha = document.getElementById('fecha').value;");
+        out.println("  var meses = parseInt(document.getElementById('periodo').value, 10);");
+        out.println("  var salida = document.getElementById('fechaVencimiento');");
+        out.println("  if (!fecha || !(meses > 0)) { salida.value = 'Faltan datos'; return; }");
+        out.println("  var d = new Date(fecha + 'T00:00:00');");
+        out.println("  d.setMonth(d.getMonth() + meses);");
+        out.println("  var dia = ('0' + d.getDate()).slice(-2);");
+        out.println("  var mes = ('0' + (d.getMonth() + 1)).slice(-2);");
+        out.println("  salida.value = dia + '/' + mes + '/' + d.getFullYear();");
+        out.println("}");
+        out.println("</script>");
     }
 
     /* ================================================================= */

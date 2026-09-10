@@ -25,7 +25,6 @@ FinancieraHuanca/
     └── webapp/
         ├── index.html             página de entrada, enlaza al servlet
         ├── css/estilo.css
-        ├── js/financiera.js       pestañas y vista previa de los cálculos
         └── WEB-INF/web.xml        registro del servlet (<servlet-mapping> /credito)
 ```
 
