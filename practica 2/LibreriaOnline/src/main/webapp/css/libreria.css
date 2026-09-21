@@ -1,0 +1,238 @@
+/* ==========================================================================
+   Libreria en Linea - hoja de estilo
+   Tema calido de libreria: vino/borgonia, crema y dorado, tarjetas con
+   sombra suave, tipografia serif para los titulos.
+   ========================================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --vino: #6b1f2a;
+    --vino-oscuro: #4a1520;
+    --dorado: #c9a44c;
+    --crema: #faf6ee;
+    --texto: #2b211a;
+    --gris: #6f6459;
+    --borde: #e4dbc9;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    background: var(--crema);
+    color: var(--texto);
+    font-family: "Segoe UI", Tahoma, Verdana, sans-serif;
+}
+
+/* ---- Cabecera ---- */
+.cabecera {
+    background: linear-gradient(135deg, var(--vino), var(--vino-oscuro));
+    color: #fff;
+    padding: 28px 20px;
+    text-align: center;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25);
+}
+
+.cabecera h1 {
+    margin: 0;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 30px;
+    letter-spacing: 0.5px;
+}
+
+.subtitulo {
+    margin: 6px 0 0;
+    color: var(--dorado);
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+/* ---- Contenido ---- */
+.contenido {
+    max-width: 980px;
+    margin: 0 auto;
+    padding: 24px 20px 40px;
+}
+
+.aviso {
+    padding: 10px 14px;
+    margin-bottom: 18px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.aviso-ok {
+    background: #e4f3e6;
+    color: #24622f;
+    border: 1px solid #b6dcbb;
+}
+
+.aviso-error {
+    background: #fbe7e7;
+    color: #8f2a2a;
+    border: 1px solid #f0bcbc;
+}
+
+/* ---- Tarjetas ---- */
+.paneles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.tarjeta {
+    background: #fff;
+    border: 1px solid var(--borde);
+    border-radius: 10px;
+    padding: 20px;
+    margin-top: 20px;
+    box-shadow: 0 2px 8px rgba(107, 31, 42, 0.08);
+}
+
+.paneles .tarjeta {
+    margin-top: 0;
+}
+
+.tarjeta h2 {
+    margin: 0 0 14px;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 19px;
+    color: var(--vino);
+    border-bottom: 2px solid var(--dorado);
+    padding-bottom: 8px;
+}
+
+.contador {
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--gris);
+    font-weight: normal;
+}
+
+/* ---- Formularios ---- */
+form label {
+    display: block;
+    margin: 12px 0 4px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--gris);
+}
+
+form input[type="text"],
+form input[type="number"],
+form select {
+    width: 100%;
+    padding: 9px 10px;
+    border: 1px solid var(--borde);
+    border-radius: 6px;
+    font: inherit;
+    font-size: 14px;
+    background: var(--crema);
+    color: var(--texto);
+}
+
+form input:focus,
+form select:focus {
+    outline: none;
+    border-color: var(--vino);
+    background: #fff;
+}
+
+.boton {
+    display: inline-block;
+    margin-top: 16px;
+    margin-right: 8px;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 6px;
+    font: inherit;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    text-decoration: none;
+    text-align: center;
+}
+
+.boton-primario {
+    background: var(--vino);
+    color: #fff;
+}
+
+.boton-primario:hover {
+    background: var(--vino-oscuro);
+}
+
+.boton-secundario {
+    background: transparent;
+    color: var(--vino);
+    border: 1px solid var(--vino);
+}
+
+.boton-secundario:hover {
+    background: rgba(107, 31, 42, 0.06);
+}
+
+/* ---- Tabla de libros ---- */
+.tabla-scroll {
+    overflow-x: auto;
+}
+
+.tabla-libros {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.tabla-libros thead th {
+    text-align: left;
+    padding: 10px 12px;
+    background: var(--vino);
+    color: #fff;
+    font-weight: 600;
+}
+
+.tabla-libros tbody td {
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--borde);
+}
+
+.tabla-libros tbody tr:nth-child(even) {
+    background: #fbf8f1;
+}
+
+.tabla-libros tbody tr:hover {
+    background: #f3e9de;
+}
+
+.col-precio {
+    text-align: right;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
+    color: var(--vino-oscuro);
+    font-weight: 600;
+}
+
+.vacio {
+    padding: 20px 0;
+    text-align: center;
+    color: var(--gris);
+}
+
+/* ---- Pie ---- */
+.pie {
+    text-align: center;
+    padding: 16px;
+    color: var(--gris);
+    font-size: 12px;
+}
+
+/* ---- Responsive ---- */
+@media (max-width: 720px) {
+    .paneles {
+        grid-template-columns: 1fr;
+    }
+}
