@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>mx.unam.ciencias.tdi</groupId>
+    <artifactId>LibreriaOnline</artifactId>
+    <version>1.0</version>
+    <packaging>war</packaging>
+
+    <name>LibreriaOnline</name>
+    <description>Practica 2 - Libreria en linea (MVC con Servlets y JSP)</description>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Java 8 (para Tomcat 7). No se usa sintaxis mas nueva. -->
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <failOnMissingWebXml>false</failOnMissingWebXml>
+    </properties>
+
+    <dependencies>
+        <!--
+            API de Servlets 3.0 = la que implementa Apache Tomcat 7.
+            Paquete javax.servlet.*  (NO jakarta).
+            scope "provided": la aporta Tomcat, no se empaqueta en el .war.
+        -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.0.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!--
+            JSTL 1.2 (etiquetas <c:...>) para las vistas JSP.
+            Tomcat 7 NO la trae puesta: por eso va en scope "compile"
+            (por defecto), asi se empaqueta en WEB-INF/lib.
+        -->
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+            <version>1.2</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <!-- El .war se llamara LibreriaOnline.war -> contexto /LibreriaOnline -->
+        <finalName>LibreriaOnline</finalName>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>3.3.2</version>
+            </plugin>
+        </plugins>
+    </build>
+</project>
