@@ -3,11 +3,11 @@ package mx.unam.ciencias.tdi.controller;
 import java.io.IOException;
 import java.util.List;
 
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.servlet.RequestDispatcher;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import mx.unam.ciencias.tdi.dao.BookDAO;
 import mx.unam.ciencias.tdi.model.Book;
@@ -19,8 +19,8 @@ import mx.unam.ciencias.tdi.model.Book;
  * del usuario (agregar, buscar, listar), habla con el DAO/Model y reenvia
  * (forward) la peticion a la vista JSP (libreria.jsp).
  *
- * Compatible con Apache Tomcat 7 (Servlet 3.0, paquete javax.servlet) y Java 8.
- * El mapeo a la URL /libreria esta en WEB-INF/web.xml.
+ * Compatible con Apache Tomcat 10.1 (Servlet 6.0, paquete jakarta.servlet) y
+ * Java 21. El mapeo a la URL /libreria esta en WEB-INF/web.xml.
  */
 public class BookServlet extends HttpServlet {
 
@@ -59,15 +59,23 @@ public class BookServlet extends HttpServlet {
             accion = "listar";
         }
 
-        switch (accion) {
-            case "agregar":
-                agregar(peticion, respuesta);
-                return; // agregar termina en un redirect, no en forward.
-            case "buscar":
-                buscar(peticion);
-                break;
-            default:
-                listar(peticion);
+        try {
+            switch (accion) {
+                case "agregar":
+                    agregar(peticion, respuesta);
+                    return; // agregar termina en un redirect, no en forward.
+                case "buscar":
+                    buscar(peticion);
+                    break;
+                default:
+                    listar(peticion);
+            }
+        } catch (RuntimeException e) {
+            // Por ejemplo, MySQL no esta corriendo o db.properties esta mal
+            // configurado: se muestra la vista con el catalogo vacio y un
+            // aviso, en vez de una pagina de error generica del servidor.
+            peticion.setAttribute("libros", java.util.Collections.emptyList());
+            peticion.setAttribute("errorDB", Boolean.TRUE);
         }
 
         mostrarVista(peticion, respuesta);
@@ -115,7 +123,14 @@ public class BookServlet extends HttpServlet {
             return;
         }
 
-        bookDAO.agregar(new Book(0, nombre, autor, precio));
+        try {
+            bookDAO.agregar(new Book(0, nombre, autor, precio));
+        } catch (RuntimeException e) {
+            // Por ejemplo, MySQL no esta corriendo o los datos de conexion
+            // en db.properties estan mal.
+            respuesta.sendRedirect(contexto + "/libreria?accion=listar&msg=db");
+            return;
+        }
         // Patron Post/Redirect/Get: evita que al recargar la pagina se vuelva
         // a enviar el formulario y se duplique el libro.
         respuesta.sendRedirect(contexto + "/libreria?accion=listar&msg=ok");

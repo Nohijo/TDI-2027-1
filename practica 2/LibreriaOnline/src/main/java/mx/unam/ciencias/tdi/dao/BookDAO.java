@@ -1,84 +1,106 @@
 package mx.unam.ciencias.tdi.dao;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import mx.unam.ciencias.tdi.model.Book;
+import mx.unam.ciencias.tdi.util.ConexionBD;
 
 /**
  * Practica 2 - Tecnologias para Desarrollos en Internet.
  *
  * DAO (Data Access Object): unico punto por el que el Controller toca los
- * datos. Aqui viven las operaciones de "base de datos" (anadir, listar,
- * buscar/filtrar/ordenar). Se guarda en memoria (una lista) para que el
- * proyecto corra sin configurar un motor de BD aparte; si mas adelante se
- * conecta una BD real, solo cambia la implementacion de esta clase.
+ * datos. Habla con la tabla "libros" de MySQL (ver esquema.sql) usando JDBC
+ * con PreparedStatement, para anadir, listar y buscar/filtrar/ordenar.
  */
 public class BookDAO {
 
-    private final List<Book> libros = new ArrayList<Book>();
-    private final AtomicInteger siguienteId = new AtomicInteger(1);
+    /** Anade un libro nuevo; MySQL le asigna el id (AUTO_INCREMENT). */
+    public void agregar(Book libro) {
+        String sql = "INSERT INTO libros (nombre, autor, precio) VALUES (?, ?, ?)";
+        try (Connection conexion = ConexionBD.obtener();
+             PreparedStatement sentencia = conexion.prepareStatement(sql)) {
 
-    public BookDAO() {
-        // Datos de ejemplo para que la vista no arranque vacia.
-        agregar(new Book(0, "Cien anios de soledad", "Gabriel Garcia Marquez", 259.00));
-        agregar(new Book(0, "1984", "George Orwell", 189.90));
-        agregar(new Book(0, "El Principito", "Antoine de Saint-Exupery", 99.50));
-        agregar(new Book(0, "Rayuela", "Julio Cortazar", 329.00));
-    }
+            sentencia.setString(1, libro.getNombre());
+            sentencia.setString(2, libro.getAutor());
+            sentencia.setDouble(3, libro.getPrecio());
+            sentencia.executeUpdate();
 
-    /** Anade un libro nuevo y le asigna un id autoincremental. */
-    public synchronized void agregar(Book libro) {
-        libro.setId(siguienteId.getAndIncrement());
-        libros.add(libro);
+        } catch (SQLException e) {
+            throw new RuntimeException("No se pudo agregar el libro", e);
+        }
     }
 
     /** Devuelve todos los libros almacenados. */
-    public synchronized List<Book> listar() {
-        return new ArrayList<Book>(libros);
+    public List<Book> listar() {
+        return buscarYOrdenar(null, null, null);
     }
 
     /**
      * Busca y filtra/ordena el listado.
      *
-     * @param texto   texto a buscar en nombre o autor (vacio/nulo = sin filtro).
-     * @param campo   atributo por el que ordenar: "nombre", "autor" o "precio".
-     * @param orden   "asc" o "desc".
+     * @param texto texto a buscar en nombre o autor (vacio/nulo = sin filtro).
+     * @param campo atributo por el que ordenar: "nombre", "autor" o "precio".
+     * @param orden "asc" o "desc".
      */
-    public synchronized List<Book> buscarYOrdenar(String texto, String campo, String orden) {
+    public List<Book> buscarYOrdenar(String texto, String campo, String orden) {
         List<Book> resultado = new ArrayList<Book>();
-        String filtro = (texto == null) ? "" : texto.trim().toLowerCase(Locale.forLanguageTag("es"));
+        boolean hayFiltro = texto != null && !texto.trim().isEmpty();
 
-        for (Book libro : libros) {
-            if (filtro.isEmpty()
-                    || libro.getNombre().toLowerCase(Locale.forLanguageTag("es")).contains(filtro)
-                    || libro.getAutor().toLowerCase(Locale.forLanguageTag("es")).contains(filtro)) {
-                resultado.add(libro);
+        StringBuilder sql = new StringBuilder("SELECT id, nombre, autor, precio FROM libros");
+        if (hayFiltro) {
+            sql.append(" WHERE nombre LIKE ? OR autor LIKE ?");
+        }
+        // El nombre de columna no se puede parametrizar con "?": se valida
+        // contra una lista fija (columnaValida) para no exponer la consulta
+        // a inyeccion SQL.
+        String columna = columnaValida(campo);
+        if (columna != null) {
+            sql.append(" ORDER BY ").append(columna);
+            if ("desc".equalsIgnoreCase(orden)) {
+                sql.append(" DESC");
             }
         }
 
-        Comparator<Book> comparador = comparadorPara(campo);
-        if (comparador != null) {
-            resultado.sort("desc".equalsIgnoreCase(orden) ? comparador.reversed() : comparador);
+        try (Connection conexion = ConexionBD.obtener();
+             PreparedStatement sentencia = conexion.prepareStatement(sql.toString())) {
+
+            if (hayFiltro) {
+                String comodin = "%" + texto.trim() + "%";
+                sentencia.setString(1, comodin);
+                sentencia.setString(2, comodin);
+            }
+
+            try (ResultSet filas = sentencia.executeQuery()) {
+                while (filas.next()) {
+                    resultado.add(new Book(
+                            filas.getInt("id"),
+                            filas.getString("nombre"),
+                            filas.getString("autor"),
+                            filas.getDouble("precio")));
+                }
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("No se pudo consultar el catalogo", e);
         }
 
         return resultado;
     }
 
-    private Comparator<Book> comparadorPara(String campo) {
+    private static String columnaValida(String campo) {
         if (campo == null) {
             return null;
         }
         switch (campo) {
             case "nombre":
-                return Comparator.comparing(Book::getNombre, String.CASE_INSENSITIVE_ORDER);
             case "autor":
-                return Comparator.comparing(Book::getAutor, String.CASE_INSENSITIVE_ORDER);
             case "precio":
-                return Comparator.comparingDouble(Book::getPrecio);
+                return campo;
             default:
                 return null;
         }

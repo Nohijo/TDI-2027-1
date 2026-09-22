@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fmt" uri="jakarta.tags.fmt" %>
 <%--
     Practica 2 - Tecnologias para Desarrollos en Internet.
 
@@ -32,6 +32,9 @@
     </c:if>
     <c:if test="${param.msg == 'error'}">
         <p class="aviso aviso-error">Revisa los datos: nombre, autor y un precio valido son obligatorios.</p>
+    </c:if>
+    <c:if test="${param.msg == 'db' or errorDB}">
+        <p class="aviso aviso-error">No se pudo conectar con la base de datos. Revisa que MySQL este corriendo y los datos en db.properties.</p>
     </c:if>
 
     <div class="paneles">

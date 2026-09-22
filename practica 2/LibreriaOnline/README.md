@@ -6,24 +6,32 @@ arquitectura **MVC** usando Servlets y JSP, siguiendo el mismo patron de
 capas Model / DAO / Controller / View que se vio en las notas de
 laboratorio.
 
-## Stack
+## Versiones
 
-- **Java 8**
-- **Apache Tomcat 7** (Servlet 3.0, paquete `javax.servlet`)
+Para que el proyecto corra sin problemas de compatibilidad, se utilizaron
+estas versiones:
+
+- **Java:** JDK 21
+- **Servidor:** Apache Tomcat 10.1
+- **Base de datos:** MySQL Server 8.0
+- **Conector JDBC:** `mysql-connector-j-8.4.0.jar`
 - **NetBeans**
-- Maven (para empaquetar el `.war`)
-- **JSTL 1.2** para las vistas JSP (`<c:...>`, `<fmt:...>`)
+- Maven (para empaquetar el `.war`; el conector JDBC y JSTL se agregan
+  solos al compilar, via `pom.xml` — no hay que copiar ningun `.jar` a mano)
 
 ## Estructura (MVC)
 
 ```
 LibreriaOnline/
 ├── pom.xml
+├── esquema.sql                       crea la BD y la tabla "libros" (con datos de ejemplo)
 └── src/main/
     ├── java/mx/unam/ciencias/tdi/
     │   ├── model/Book.java              Model: entidad Libro (nombre, autor, precio)
-    │   ├── dao/BookDAO.java             DAO: alta, listado, busqueda/orden (en memoria)
-    │   └── controller/BookServlet.java  Controller: unico servlet (/libreria)
+    │   ├── dao/BookDAO.java             DAO: alta, listado, busqueda/orden (JDBC + MySQL)
+    │   ├── controller/BookServlet.java  Controller: unico servlet (/libreria)
+    │   └── util/ConexionBD.java         abre conexiones a MySQL usando db.properties
+    ├── resources/db.properties          datos de conexion a MySQL (editar antes de correr)
     └── webapp/
         ├── index.jsp                    redirige al controller
         ├── libreria.jsp                 View: unica pagina (agregar + tabla + buscar)
@@ -31,10 +39,9 @@ LibreriaOnline/
         └── WEB-INF/web.xml
 ```
 
-> La consigna pide la ruta `web/libreria.jsp`; en un proyecto Maven (el
-> mismo esquema que en la Tarea 1) esa carpeta se llama `webapp`, que es
-> la convencion estandar que reconoce NetBeans/Tomcat. El archivo vive en
-> `src/main/webapp/libreria.jsp`.
+> La consigna pide la ruta `web/libreria.jsp`; en un proyecto Maven esa
+> carpeta se llama `webapp`, que es la convencion estandar que reconoce
+> NetBeans/Tomcat. El archivo vive en `src/main/webapp/libreria.jsp`.
 
 ## Como funciona el flujo MVC
 
@@ -44,45 +51,59 @@ LibreriaOnline/
 | `buscar` | GET | El Controller lee `q` (texto), `campo` (nombre/autor/precio) y `orden` (asc/desc), se los pasa al DAO y hace forward a la vista con el resultado |
 | `agregar` | POST | El Controller valida los datos del formulario, crea un `Book`, lo guarda con el DAO y hace **redirect** a `listar` (patron Post/Redirect/Get, para no duplicar el libro si se recarga la pagina) |
 
-El `BookDAO` guarda los libros en memoria (una lista sincronizada) para
-que el proyecto corra sin configurar un motor de base de datos aparte;
-si se conecta una BD real (por ejemplo con JDBC), solo cambia la
-implementacion interna de esa clase — el Model, el Controller y la vista
-no se tocan.
+El `BookDAO` habla con MySQL por JDBC (tabla `libros`, ver `esquema.sql`).
+Si MySQL no esta corriendo o `db.properties` tiene datos incorrectos, el
+Controller lo atrapa y muestra un aviso en la vista en vez de una pagina
+de error del servidor.
 
-## Como abrir y ejecutar en NetBeans
+## Antes de correrlo: preparar MySQL
 
-### 1. Tener JDK 8 y registrarlo
+1. Tener **MySQL Server 8.0** corriendo localmente.
+2. Ejecutar `esquema.sql` una sola vez como root del sistema (crea la base
+   `libreria_online`, la tabla `libros`, unos libros de ejemplo, y el
+   usuario `libreria_app` que usa la aplicacion):
 
-Si NetBeans corre con un Java mas nuevo, agrega el 8 igual:
-`Tools ▸ Java Platforms ▸ Add Platform…` y elige la carpeta del JDK 8.
-Luego en el proyecto: clic derecho ▸ `Properties ▸ Build ▸ Compile` ▸
-*Java Platform* = **8**.
+   ```bash
+   sudo mysql -u root < esquema.sql
+   ```
 
-### 2. Registrar Tomcat 7 (una sola vez)
+   > En una instalacion nueva de MySQL 8.0 en Linux, `root`@`localhost`
+   > suele usar el plugin `auth_socket` (solo entra el usuario del sistema
+   > operativo "root", por eso el `sudo`). Por esto mismo la aplicacion
+   > **no** se conecta como `root`: `esquema.sql` crea un usuario aparte,
+   > `libreria_app`, con contraseña, que sí sirve para conectarse por TCP
+   > (JDBC) — ya viene configurado en `db.properties`.
 
-`Tools ▸ Servers ▸ Add Server… ▸ Apache Tomcat or TomEE ▸ Next`.
-En *Server Location* pon la carpeta de Tomcat 7. Si no lo tienes:
+3. `src/main/resources/db.properties` ya trae los datos que crea
+   `esquema.sql`; solo edítalo si usas otro usuario/base/contraseña:
 
-```bash
-cd ~ && curl -LO https://archive.apache.org/dist/tomcat/tomcat-7/v7.0.109/bin/apache-tomcat-7.0.109.tar.gz && tar xzf apache-tomcat-7.0.109.tar.gz
-```
+   ```properties
+   db.url=jdbc:mysql://localhost:3306/libreria_online?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
+   db.usuario=libreria_app
+   db.password=libreria_pass
+   ```
 
-Deja usuario/contraseña en blanco.
+## Como levantarlo en NetBeans
 
-### 3. Abrir el proyecto
+1. Tener **JDK 21** registrado en NetBeans (`Tools ▸ Java Platforms`).
+2. Registrar **Apache Tomcat 10.1** (`Tools ▸ Servers ▸ Add Server… ▸
+   Apache Tomcat or TomEE`), apuntando a la carpeta donde lo descargaste.
+   Si no lo tienes:
 
-`File ▸ Open Project…` y selecciona la carpeta `LibreriaOnline`
-(NetBeans la reconoce por el `pom.xml`).
+   ```bash
+   cd ~ && curl -LO https://archive.apache.org/dist/tomcat/tomcat-10/v10.1.31/bin/apache-tomcat-10.1.31.tar.gz && tar xzf apache-tomcat-10.1.31.tar.gz
+   ```
 
-### 4. Ejecutar
-
-Clic derecho en el proyecto ▸ **Run**. Elige Tomcat 7 cuando pregunte
-(o en `Properties ▸ Run ▸ Server`).
-
-### 5. Ver la aplicacion
-
-- `http://localhost:8080/LibreriaOnline/`
+3. Abrir el proyecto: `File ▸ Open Project…` y seleccionar la carpeta
+   `LibreriaOnline` (NetBeans la reconoce por el `pom.xml`).
+4. Confirmar que `mysql-connector-j-8.4.0.jar` aparece dentro de
+   **Dependencies/Libraries** del proyecto (Maven lo descarga solo la
+   primera vez que compilas, gracias al `pom.xml`; no hace falta copiarlo
+   a mano a `WEB-INF/lib`, eso Maven lo empaqueta automaticamente).
+5. Clic derecho en el proyecto ▸ **Clean and Build**.
+6. Clic derecho en el proyecto ▸ **Run**. Elige Tomcat 10.1 cuando
+   pregunte (o en `Properties ▸ Run ▸ Server`).
+7. Ver la aplicacion: `http://localhost:8080/LibreriaOnline/`
 
 ## Generar el .war a mano (opcional)
 
@@ -91,6 +112,5 @@ mvn -f "practica 2/LibreriaOnline/pom.xml" clean package
 # resultado: practica 2/LibreriaOnline/target/LibreriaOnline.war
 ```
 
-Probado con `mvn clean package` (compila sin errores) y con Apache Tomcat
-7.0.109: alta, listado, busqueda y orden funcionan; el catalogo trae
-libros de ejemplo precargados para que la tabla no arranque vacia.
+`mvn clean package` compila sin errores; el `.war` incluye JSTL y el
+conector de MySQL empaquetados en `WEB-INF/lib`.

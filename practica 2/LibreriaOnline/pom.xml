@@ -14,34 +14,51 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <!-- Java 8 (para Tomcat 7). No se usa sintaxis mas nueva. -->
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
+        <!-- Java 21 (para Tomcat 10.1 / Jakarta EE 10). -->
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
         <failOnMissingWebXml>false</failOnMissingWebXml>
     </properties>
 
     <dependencies>
         <!--
-            API de Servlets 3.0 = la que implementa Apache Tomcat 7.
-            Paquete javax.servlet.*  (NO jakarta).
+            API de Servlets 6.0 = la que implementa Apache Tomcat 10.1.
+            Paquete jakarta.servlet.*  (NO javax).
             scope "provided": la aporta Tomcat, no se empaqueta en el .war.
         -->
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>javax.servlet-api</artifactId>
-            <version>3.0.1</version>
+            <groupId>jakarta.servlet</groupId>
+            <artifactId>jakarta.servlet-api</artifactId>
+            <version>6.0.0</version>
             <scope>provided</scope>
         </dependency>
 
         <!--
-            JSTL 1.2 (etiquetas <c:...>) para las vistas JSP.
-            Tomcat 7 NO la trae puesta: por eso va en scope "compile"
-            (por defecto), asi se empaqueta en WEB-INF/lib.
+            JSTL (Jakarta, para Tomcat 10.1) para las etiquetas <c:...> y
+            <fmt:...> de las vistas JSP. Tomcat no la trae puesta: van en
+            scope "compile" (por defecto) para empaquetarse en WEB-INF/lib.
+            Hacen falta las dos: la API (las clases que el JSP referencia
+            al compilar, como ConditionalTagSupport) y la implementacion.
         -->
         <dependency>
-            <groupId>javax.servlet</groupId>
-            <artifactId>jstl</artifactId>
-            <version>1.2</version>
+            <groupId>jakarta.servlet.jsp.jstl</groupId>
+            <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+            <version>3.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.web</groupId>
+            <artifactId>jakarta.servlet.jsp.jstl</artifactId>
+            <version>3.0.1</version>
+        </dependency>
+
+        <!--
+            Conector JDBC de MySQL: permite que BookDAO hable con MySQL
+            Server 8.0. Igual que JSTL, se empaqueta en WEB-INF/lib.
+        -->
+        <dependency>
+            <groupId>com.mysql</groupId>
+            <artifactId>mysql-connector-j</artifactId>
+            <version>8.4.0</version>
         </dependency>
     </dependencies>
 
@@ -52,12 +69,12 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.13.0</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
-                <version>3.3.2</version>
+                <version>3.4.0</version>
             </plugin>
         </plugins>
     </build>
