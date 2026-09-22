@@ -18,6 +18,8 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <failOnMissingWebXml>false</failOnMissingWebXml>
+        <!-- Carpeta donde esta instalado Apache Tomcat 10.1 (ver README). -->
+        <tomcat.home>${user.home}/apache-tomcat-10.1.31</tomcat.home>
     </properties>
 
     <dependencies>
@@ -75,6 +77,41 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-war-plugin</artifactId>
                 <version>3.4.0</version>
+            </plugin>
+
+            <!--
+                Cargo levanta el Tomcat 10.1 instalado y despliega el .war,
+                sin depender del selector de servidores del IDE.
+                "mvn cargo:run" = arrancar la aplicacion.
+            -->
+            <plugin>
+                <groupId>org.codehaus.cargo</groupId>
+                <artifactId>cargo-maven3-plugin</artifactId>
+                <version>1.10.15</version>
+                <configuration>
+                    <container>
+                        <containerId>tomcat10x</containerId>
+                        <type>installed</type>
+                        <home>${tomcat.home}</home>
+                    </container>
+                    <configuration>
+                        <type>standalone</type>
+                        <home>${project.build.directory}/tomcat10x</home>
+                        <properties>
+                            <cargo.servlet.port>8080</cargo.servlet.port>
+                        </properties>
+                    </configuration>
+                    <deployables>
+                        <deployable>
+                            <groupId>mx.unam.ciencias.tdi</groupId>
+                            <artifactId>LibreriaOnline</artifactId>
+                            <type>war</type>
+                            <properties>
+                                <context>LibreriaOnline</context>
+                            </properties>
+                        </deployable>
+                    </deployables>
+                </configuration>
             </plugin>
         </plugins>
     </build>

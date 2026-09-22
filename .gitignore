@@ -11,9 +11,10 @@ target/
 
 # NetBeans
 nbproject/private/
-nbactions.xml
 .nb-gradle/
 build/
+# nbactions.xml normalmente es local, pero en practica 2 define como
+# arrancar Tomcat al dar Run, asi que si se versiona.
 
 # Entregables (se generan a partir del proyecto, no se versionan)
 *.zip

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Acciones del IDE (NetBeans) para este proyecto.
+
+"Run" arranca Apache Tomcat 10.1 con la aplicacion ya desplegada usando
+el plugin Cargo, en vez de depender del selector de servidores del IDE.
+La aplicacion queda en: http://localhost:8080/LibreriaOnline/
+Para detenerla, se usa el boton rojo de "Stop" en la ventana Output.
+-->
+<actions>
+    <action>
+        <actionName>run</actionName>
+        <goals>
+            <goal>package</goal>
+            <goal>org.codehaus.cargo:cargo-maven3-plugin:run</goal>
+        </goals>
+    </action>
+    <action>
+        <actionName>debug</actionName>
+        <goals>
+            <goal>package</goal>
+            <goal>org.codehaus.cargo:cargo-maven3-plugin:run</goal>
+        </goals>
+    </action>
+    <action>
+        <actionName>build</actionName>
+        <goals>
+            <goal>install</goal>
+        </goals>
+    </action>
+    <action>
+        <actionName>rebuild</actionName>
+        <goals>
+            <goal>clean</goal>
+            <goal>install</goal>
+        </goals>
+    </action>
+</actions>
