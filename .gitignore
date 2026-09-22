@@ -19,3 +19,4 @@ build/
 # Entregables (se generan a partir del proyecto, no se versionan)
 *.zip
 tarea */MarquezCristovalMiguelAngel_*/
+/practica 2/LibreriaOnline/dist/

@@ -15,33 +15,42 @@ estas versiones:
 - **Servidor:** Apache Tomcat 10.1
 - **Base de datos:** MySQL Server 8.0
 - **Conector JDBC:** `mysql-connector-j-8.4.0.jar`
-- **NetBeans**
-- Maven (para empaquetar el `.war`; el conector JDBC y JSTL se agregan
-  solos al compilar, via `pom.xml` — no hay que copiar ningun `.jar` a mano)
+- **NetBeans** (proyecto *Web Application*, con Ant)
 
 ## Estructura (MVC)
 
+Proyecto **Web Application de NetBeans (Ant)**, que es el tipo de proyecto
+que el IDE despliega directamente en Tomcat con el boton *Run*.
+
 ```
 LibreriaOnline/
-├── pom.xml
+├── build.xml                         script de Ant (lo usa NetBeans)
+├── nbproject/                        configuracion del proyecto de NetBeans
 ├── esquema.sql                       crea la BD y la tabla "libros" (con datos de ejemplo)
-└── src/main/
-    ├── java/mx/unam/ciencias/tdi/
-    │   ├── model/Book.java              Model: entidad Libro (nombre, autor, precio)
-    │   ├── dao/BookDAO.java             DAO: alta, listado, busqueda/orden (JDBC + MySQL)
-    │   ├── controller/BookServlet.java  Controller: unico servlet (/libreria)
-    │   └── util/ConexionBD.java         abre conexiones a MySQL usando db.properties
-    ├── resources/db.properties          datos de conexion a MySQL (editar antes de correr)
-    └── webapp/
-        ├── index.jsp                    redirige al controller
-        ├── libreria.jsp                 View: unica pagina (agregar + tabla + buscar)
-        ├── css/libreria.css
-        └── WEB-INF/web.xml
+├── lib/                              .jar de los que depende el proyecto
+│   ├── mysql-connector-j-8.4.0.jar   conector JDBC de MySQL
+│   ├── protobuf-java-3.25.1.jar      (lo necesita el conector)
+│   └── jakarta.servlet.jsp.jstl*.jar JSTL para las etiquetas <c:...> del JSP
+├── src/
+│   ├── conf/MANIFEST.MF
+│   └── java/
+│       ├── db.properties               datos de conexion a MySQL
+│       └── mx/unam/ciencias/tdi/
+│           ├── model/Book.java              Model: entidad Libro (nombre, autor, precio)
+│           ├── dao/BookDAO.java             DAO: alta, listado, busqueda/orden (JDBC + MySQL)
+│           ├── controller/BookServlet.java  Controller: unico servlet (/libreria)
+│           └── util/ConexionBD.java         abre conexiones a MySQL usando db.properties
+└── web/
+    ├── index.jsp                     redirige al controller
+    ├── libreria.jsp                  View: unica pagina (agregar + tabla + buscar)
+    ├── css/libreria.css
+    ├── META-INF/context.xml          fija el contexto /LibreriaOnline
+    └── WEB-INF/web.xml               registro del servlet
 ```
 
-> La consigna pide la ruta `web/libreria.jsp`; en un proyecto Maven esa
-> carpeta se llama `webapp`, que es la convencion estandar que reconoce
-> NetBeans/Tomcat. El archivo vive en `src/main/webapp/libreria.jsp`.
+Los `.jar` viven dentro del proyecto (`lib/`) y se referencian con rutas
+relativas, asi que el proyecto compila igual en cualquier maquina; Ant los
+copia solo a `web/WEB-INF/lib` dentro del `.war` al construir.
 
 ## Como funciona el flujo MVC
 
@@ -74,8 +83,8 @@ de error del servidor.
    > `libreria_app`, con contraseña, que sí sirve para conectarse por TCP
    > (JDBC) — ya viene configurado en `db.properties`.
 
-3. `src/main/resources/db.properties` ya trae los datos que crea
-   `esquema.sql`; solo edítalo si usas otro usuario/base/contraseña:
+3. `src/java/db.properties` ya trae los datos que crea `esquema.sql`;
+   solo edítalo si usas otro usuario/base/contraseña:
 
    ```properties
    db.url=jdbc:mysql://localhost:3306/libreria_online?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
@@ -95,22 +104,26 @@ de error del servidor.
    ```
 
 3. Abrir el proyecto: `File ▸ Open Project…` y seleccionar la carpeta
-   `LibreriaOnline` (NetBeans la reconoce por el `pom.xml`).
-4. Confirmar que `mysql-connector-j-8.4.0.jar` aparece dentro de
-   **Dependencies/Libraries** del proyecto (Maven lo descarga solo la
-   primera vez que compilas, gracias al `pom.xml`; no hace falta copiarlo
-   a mano a `WEB-INF/lib`, eso Maven lo empaqueta automaticamente).
+   `LibreriaOnline` (NetBeans la reconoce por `nbproject/`).
+4. Confirmar que `mysql-connector-j-8.4.0.jar` aparece en el nodo
+   **Libraries** del proyecto (ya viene referenciado desde `lib/`;
+   Ant lo copia a `web/WEB-INF/lib` dentro del `.war` al construir).
 5. Clic derecho en el proyecto ▸ **Clean and Build**.
-6. Clic derecho en el proyecto ▸ **Run**. Elige Tomcat 10.1 cuando
-   pregunte (o en `Properties ▸ Run ▸ Server`).
+6. Clic derecho en el proyecto ▸ **Run**.
 7. Ver la aplicacion: `http://localhost:8080/LibreriaOnline/`
+
+> Si el servidor no aparece seleccionado: clic derecho en el proyecto ▸
+> `Properties ▸ Run ▸ Server`. La instancia concreta se guarda en
+> `nbproject/private/private.properties` (`j2ee.server.instance`), que es
+> propio de cada maquina.
 
 ## Generar el .war a mano (opcional)
 
 ```bash
-mvn -f "practica 2/LibreriaOnline/pom.xml" clean package
-# resultado: practica 2/LibreriaOnline/target/LibreriaOnline.war
+ant -f "practica 2/LibreriaOnline/build.xml" clean dist
+# resultado: practica 2/LibreriaOnline/dist/LibreriaOnline.war
 ```
 
-`mvn clean package` compila sin errores; el `.war` incluye JSTL y el
-conector de MySQL empaquetados en `WEB-INF/lib`.
+Probado con Apache Tomcat 10.1.31, JDK 21 y MySQL 8.0: el `.war` incluye
+JSTL y el conector de MySQL en `WEB-INF/lib`, y desde el navegador
+funcionan agregar, listar, buscar y ordenar.
