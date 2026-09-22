@@ -31,8 +31,10 @@ Necesita **JDK 21**, **Apache Tomcat 10.1**, **MySQL 8.0** y **NetBeans**.
    sudo mysql -u root < "practica 2/LibreriaOnline/esquema.sql"
    ```
 
-2. En `<carpeta-de-tomcat>/conf/tomcat-users.xml`, antes de
-   `</tomcat-users>`, agregar el usuario que NetBeans usa para desplegar:
+2. Si tu Tomcat aún no tiene un usuario del *Manager* (NetBeans lo
+   necesita para desplegar), agregarlo en
+   `<carpeta-de-tomcat>/conf/tomcat-users.xml`, antes de
+   `</tomcat-users>` — el usuario y la contraseña los eliges tú:
 
    ```xml
    <role rolename="manager-script"/>
@@ -40,10 +42,13 @@ Necesita **JDK 21**, **Apache Tomcat 10.1**, **MySQL 8.0** y **NetBeans**.
    ```
 
 3. Abrir `practica 2/LibreriaOnline` en NetBeans ▸ clic derecho ▸
-   **Clean and Build** ▸ clic derecho ▸ **Run** (si pide usuario:
-   `admin` / `admin`).
+   **Clean and Build** ▸ clic derecho ▸ **Run**.
 
 4. Abrir <http://localhost:8080/LibreriaOnline/>
+
+**Sin NetBeans** (no necesita ningún usuario): generar el `.war` con
+`ant -f build.xml clean dist`, copiarlo a `<tomcat>/webapps/` y encender
+Tomcat. Ver el README de la práctica para el detalle.
 
 Los pasos completos, y que hacer si algo falla, están en
 [practica 2/LibreriaOnline/README.md](practica%202/LibreriaOnline/README.md).

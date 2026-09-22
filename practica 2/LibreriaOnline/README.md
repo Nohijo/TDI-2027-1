@@ -121,11 +121,12 @@ de error del servidor.
    cd ~ && curl -LO https://archive.apache.org/dist/tomcat/tomcat-10/v10.1.31/bin/apache-tomcat-10.1.31.tar.gz && tar xzf apache-tomcat-10.1.31.tar.gz
    ```
 
-3. **Crear un usuario del Manager de Tomcat.** NetBeans despliega a traves
-   de la aplicacion *Manager* de Tomcat, y un Tomcat recien descargado no
-   trae ningun usuario dado de alta (vienen todos comentados). Sin esto,
-   al dar *Run* aparece una y otra vez la ventana **"Authentication
-   Required - Tomcat Manager Application"**.
+3. **Crear un usuario del Manager de Tomcat** (solo si tu Tomcat todavia
+   no tiene uno). NetBeans despliega a traves de la aplicacion *Manager*
+   de Tomcat, y un Tomcat recien descargado no trae ningun usuario dado
+   de alta (vienen todos comentados). Sin esto, al dar *Run* aparece una
+   y otra vez la ventana **"Authentication Required - Tomcat Manager
+   Application"**.
 
    Editar `<carpeta-de-tomcat>/conf/tomcat-users.xml` y, antes de
    `</tomcat-users>`, agregar:
@@ -135,6 +136,12 @@ de error del servidor.
    <role rolename="manager-gui"/>
    <user username="admin" password="admin" roles="manager-script,manager-gui"/>
    ```
+
+   > El usuario y la contraseña los eliges tu: van en la instalacion de
+   > Tomcat de cada quien, **no** son parte del proyecto. `admin/admin`
+   > es solo un ejemplo, valido para un Tomcat local de desarrollo.
+   > Si prefieres no configurar nada de esto, ve a la seccion
+   > *"Alternativa: correrlo sin NetBeans"*, que no necesita usuario.
 
    Para comprobar que quedo bien (con Tomcat encendido):
 
@@ -158,6 +165,26 @@ de error del servidor.
 > `Properties ▸ Run ▸ Server`. La instancia concreta se guarda en
 > `nbproject/private/private.properties` (`j2ee.server.instance`), que es
 > propio de cada maquina.
+
+## Alternativa: correrlo sin NetBeans (lo mas rapido para revisarlo)
+
+Desplegando el `.war` directamente **no hace falta ningun usuario ni
+contraseña**: el Manager de Tomcat solo lo usa NetBeans para desplegar.
+
+```bash
+# 1. preparar la base de datos (solo la primera vez)
+sudo systemctl start mysql
+sudo mysql -u root < esquema.sql
+
+# 2. generar el .war
+ant -f build.xml clean dist
+
+# 3. copiarlo a Tomcat y encenderlo
+cp dist/LibreriaOnline.war <carpeta-de-tomcat>/webapps/
+<carpeta-de-tomcat>/bin/startup.sh
+
+# 4. abrir http://localhost:8080/LibreriaOnline/
+```
 
 ## Generar el .war a mano (opcional)
 
