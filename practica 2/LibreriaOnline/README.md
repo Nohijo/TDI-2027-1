@@ -6,6 +6,20 @@ arquitectura **MVC** usando Servlets y JSP, siguiendo el mismo patron de
 capas Model / DAO / Controller / View que se vio en las notas de
 laboratorio.
 
+## Resumen rapido (si ya esta todo instalado)
+
+```bash
+sudo systemctl start mysql          # 1. la base de datos debe estar encendida
+```
+
+2. Abrir el proyecto en NetBeans ▸ clic derecho ▸ **Clean and Build**.
+3. Clic derecho ▸ **Run**. Si pide usuario del Manager de Tomcat:
+   **admin / admin**.
+4. Abrir `http://localhost:8080/LibreriaOnline/`
+
+Si es la primera vez en esta computadora, seguir las secciones completas
+de abajo (preparar MySQL y preparar NetBeans/Tomcat).
+
 ## Versiones
 
 Para que el proyecto corra sin problemas de compatibilidad, se utilizaron
@@ -103,14 +117,38 @@ de error del servidor.
    cd ~ && curl -LO https://archive.apache.org/dist/tomcat/tomcat-10/v10.1.31/bin/apache-tomcat-10.1.31.tar.gz && tar xzf apache-tomcat-10.1.31.tar.gz
    ```
 
-3. Abrir el proyecto: `File ▸ Open Project…` y seleccionar la carpeta
+3. **Crear un usuario del Manager de Tomcat.** NetBeans despliega a traves
+   de la aplicacion *Manager* de Tomcat, y un Tomcat recien descargado no
+   trae ningun usuario dado de alta (vienen todos comentados). Sin esto,
+   al dar *Run* aparece una y otra vez la ventana **"Authentication
+   Required - Tomcat Manager Application"**.
+
+   Editar `<carpeta-de-tomcat>/conf/tomcat-users.xml` y, antes de
+   `</tomcat-users>`, agregar:
+
+   ```xml
+   <role rolename="manager-script"/>
+   <role rolename="manager-gui"/>
+   <user username="admin" password="admin" roles="manager-script,manager-gui"/>
+   ```
+
+   Para comprobar que quedo bien (con Tomcat encendido):
+
+   ```bash
+   curl -u admin:admin http://localhost:8080/manager/text/list
+   ```
+
+   Debe responder `OK - Listed applications for virtual host [localhost]`.
+
+4. Abrir el proyecto: `File ▸ Open Project…` y seleccionar la carpeta
    `LibreriaOnline` (NetBeans la reconoce por `nbproject/`).
-4. Confirmar que `mysql-connector-j-8.4.0.jar` aparece en el nodo
+5. Confirmar que `mysql-connector-j-8.4.0.jar` aparece en el nodo
    **Libraries** del proyecto (ya viene referenciado desde `lib/`;
    Ant lo copia a `web/WEB-INF/lib` dentro del `.war` al construir).
-5. Clic derecho en el proyecto ▸ **Clean and Build**.
-6. Clic derecho en el proyecto ▸ **Run**.
-7. Ver la aplicacion: `http://localhost:8080/LibreriaOnline/`
+6. Clic derecho en el proyecto ▸ **Clean and Build**.
+7. Clic derecho en el proyecto ▸ **Run**. La primera vez pide el usuario
+   del Manager: **admin / admin** (el del paso 3).
+8. Ver la aplicacion: `http://localhost:8080/LibreriaOnline/`
 
 > Si el servidor no aparece seleccionado: clic derecho en el proyecto ▸
 > `Properties ▸ Run ▸ Server`. La instancia concreta se guarda en
@@ -127,3 +165,13 @@ ant -f "practica 2/LibreriaOnline/build.xml" clean dist
 Probado con Apache Tomcat 10.1.31, JDK 21 y MySQL 8.0: el `.war` incluye
 JSTL y el conector de MySQL en `WEB-INF/lib`, y desde el navegador
 funcionan agregar, listar, buscar y ordenar.
+
+## Problemas comunes
+
+| Que se ve | Causa y solucion |
+|---|---|
+| Ventana **"Authentication Required - Tomcat Manager Application"** al dar Run | Falta el usuario del Manager en `conf/tomcat-users.xml` (paso 3). Usuario/contraseña: `admin` / `admin`. |
+| Aviso **"No se pudo conectar con la base de datos"** en la pagina | MySQL no esta encendido (`sudo systemctl start mysql`) o los datos de `src/java/db.properties` no coinciden con los que creo `esquema.sql`. |
+| La tabla sale vacia sin ningun aviso | La base existe pero la tabla `libros` esta vacia: volver a correr `sudo mysql -u root < esquema.sql`. |
+| **"No suitable Deployment Server is defined"** | Le falta el servidor al proyecto: clic derecho ▸ `Properties ▸ Run ▸ Server` y elegir Tomcat. (Esto le pasa a los proyectos **Maven**; por eso este es un proyecto *Web Application* con Ant.) |
+| El puerto 8080 esta ocupado | Ya hay otro Tomcat corriendo: `pkill -f catalina` y volver a dar Run. |
