@@ -197,16 +197,6 @@ Probado con Apache Tomcat 10.1.31, JDK 21 y MySQL 8.0: el `.war` incluye
 JSTL y el conector de MySQL en `WEB-INF/lib`, y desde el navegador
 funcionan agregar, listar, buscar y ordenar.
 
-## Problemas comunes
-
-| Que se ve | Causa y solucion |
-|---|---|
-| Ventana **"Authentication Required - Tomcat Manager Application"** al dar Run | Falta el usuario del Manager en `conf/tomcat-users.xml` (paso 3). Usuario/contraseña: `admin` / `admin`. |
-| Aviso **"No se pudo conectar con la base de datos"** en la pagina | MySQL no esta encendido (`sudo systemctl start mysql`) o los datos de `src/java/db.properties` no coinciden con los que creo `esquema.sql`. |
-| La tabla sale vacia sin ningun aviso | La base existe pero la tabla `libros` esta vacia: volver a correr `sudo mysql -u root < esquema.sql`. |
-| **"No suitable Deployment Server is defined"** | Le falta el servidor al proyecto: clic derecho ▸ `Properties ▸ Run ▸ Server` y elegir Tomcat. (Esto le pasa a los proyectos **Maven**; por eso este es un proyecto *Web Application* con Ant.) |
-| El puerto 8080 esta ocupado | Ya hay otro Tomcat corriendo: `pkill -f catalina` y volver a dar Run. |
-
 ---
 
 *El contenido de este README se redactó con ayuda de Claude (Anthropic).*
