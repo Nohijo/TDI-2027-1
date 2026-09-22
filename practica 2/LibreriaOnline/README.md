@@ -6,6 +6,20 @@ Aplicacion web de una libreria en linea: permite **agregar**, **listar** y
 **buscar/filtrar/ordenar** libros, con arquitectura **MVC** (Model, DAO,
 Controller y View) usando Servlets y JSP.
 
+## Capturas
+
+Catalogo con los libros guardados en MySQL:
+
+![Catalogo de libros](imagenes/catalogo.png)
+
+Busqueda por texto y ordenamiento por precio (descendente):
+
+![Busqueda y filtrado](imagenes/busqueda.png)
+
+Alta de un libro nuevo:
+
+![Libro agregado](imagenes/agregar.png)
+
 ## Versiones
 
 - **Java:** JDK 21
