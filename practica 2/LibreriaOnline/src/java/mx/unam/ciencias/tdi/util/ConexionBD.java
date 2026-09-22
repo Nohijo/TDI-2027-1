@@ -12,6 +12,8 @@ import java.util.Properties;
  *
  * Punto unico para abrir conexiones a MySQL. Los datos de conexion viven en
  * db.properties (classpath) para que se puedan ajustar sin recompilar.
+ *
+ * @author Miguel Angel Marquez Cristoval
  */
 public final class ConexionBD {
 

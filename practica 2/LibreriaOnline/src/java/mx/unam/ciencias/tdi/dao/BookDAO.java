@@ -16,6 +16,8 @@ import mx.unam.ciencias.tdi.util.ConexionBD;
  * DAO (Data Access Object): unico punto por el que el Controller toca los
  * datos. Habla con la tabla "libros" de MySQL (ver esquema.sql) usando JDBC
  * con PreparedStatement, para anadir, listar y buscar/filtrar/ordenar.
+ *
+ * @author Miguel Angel Marquez Cristoval
  */
 public class BookDAO {
 

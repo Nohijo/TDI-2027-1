@@ -1,5 +1,7 @@
 # Tecnologías para Desarrollos en Internet
 
+**Miguel Ángel Márquez Cristóval**
+
 Trabajos de la materia: prácticas y tareas.
 
 ## Contenido
@@ -45,3 +47,7 @@ Necesita **JDK 21**, **Apache Tomcat 10.1**, **MySQL 8.0** y **NetBeans**.
 
 Los pasos completos, y que hacer si algo falla, están en
 [practica 2/LibreriaOnline/README.md](practica%202/LibreriaOnline/README.md).
+
+---
+
+*El contenido de este README se redactó con ayuda de Claude (Anthropic).*

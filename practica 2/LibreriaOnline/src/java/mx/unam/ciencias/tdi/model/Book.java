@@ -8,6 +8,8 @@ import java.io.Serializable;
  * Model de la arquitectura MVC: representa un libro de la libreria.
  * Solo datos y accesores, sin logica de negocio ni de persistencia
  * (eso vive en el DAO) ni de peticiones HTTP (eso vive en el Controller).
+ *
+ * @author Miguel Angel Marquez Cristoval
  */
 public class Book implements Serializable {
 

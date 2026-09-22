@@ -21,6 +21,8 @@ import mx.unam.ciencias.tdi.model.Book;
  *
  * Compatible con Apache Tomcat 10.1 (Servlet 6.0, paquete jakarta.servlet) y
  * Java 21. El mapeo a la URL /libreria esta en WEB-INF/web.xml.
+ *
+ * @author Miguel Angel Marquez Cristoval
  */
 public class BookServlet extends HttpServlet {
 

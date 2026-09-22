@@ -8,6 +8,8 @@
     muestra lo que el Controller (BookServlet) deja en el request
     ("libros", y al buscar tambien "q", "campo", "orden"); no habla
     con el DAO ni con el Model directamente.
+
+    Autor: Miguel Angel Marquez Cristoval
 --%>
 <c:set var="ctx" value="${pageContext.request.contextPath}" />
 <!DOCTYPE html>

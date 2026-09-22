@@ -1,5 +1,7 @@
 # Practica 2 - Libreria en Linea (MVC con Servlets y JSP)
 
+**Miguel Angel Marquez Cristoval**
+
 Aplicacion web que simula una libreria en linea: permite **agregar**,
 **listar** y **buscar/filtrar/ordenar** libros. Implementada con la
 arquitectura **MVC** usando Servlets y JSP, siguiendo el mismo patron de
@@ -8,9 +10,11 @@ laboratorio.
 
 ## Resumen rapido (si ya esta todo instalado)
 
-```bash
-sudo systemctl start mysql          # 1. la base de datos debe estar encendida
-```
+1. Encender la base de datos:
+
+   ```bash
+   sudo systemctl start mysql
+   ```
 
 2. Abrir el proyecto en NetBeans ▸ clic derecho ▸ **Clean and Build**.
 3. Clic derecho ▸ **Run**. Si pide usuario del Manager de Tomcat:
@@ -175,3 +179,7 @@ funcionan agregar, listar, buscar y ordenar.
 | La tabla sale vacia sin ningun aviso | La base existe pero la tabla `libros` esta vacia: volver a correr `sudo mysql -u root < esquema.sql`. |
 | **"No suitable Deployment Server is defined"** | Le falta el servidor al proyecto: clic derecho ▸ `Properties ▸ Run ▸ Server` y elegir Tomcat. (Esto le pasa a los proyectos **Maven**; por eso este es un proyecto *Web Application* con Ant.) |
 | El puerto 8080 esta ocupado | Ya hay otro Tomcat corriendo: `pkill -f catalina` y volver a dar Run. |
+
+---
+
+*El contenido de este README se redactó con ayuda de Claude (Anthropic).*
