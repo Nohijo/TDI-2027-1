@@ -20,3 +20,7 @@ build/
 *.zip
 tarea */MarquezCristovalMiguelAngel_*/
 /practica 2/LibreriaOnline/dist/
+
+# Material que manda el profesor (libros con copyright, notas, programas de
+# ejemplo). El repo es publico, asi que esto vive solo en local.
+teoria/
