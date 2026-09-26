@@ -28,9 +28,9 @@
 	</div>
 
 	<div class="tabs">
-		<button type="button" class="tab"
+		<button type="button" class="tab" id="tab-personales"
 			onclick="mostrarPestana('panel-personales', this)">Datos personales</button>
-		<button type="button" class="tab activo"
+		<button type="button" class="tab activo" id="tab-credito"
 			onclick="mostrarPestana('panel-credito', this)">Datos del crédito</button>
 	</div>
 
@@ -161,6 +161,26 @@
 		var mes = ('0' + (d.getMonth() + 1)).slice(-2);
 		salida.value = dia + '/' + mes + '/' + d.getFullYear();
 	}
+	/* Si la validación dejó avisos, marcar la pestaña que los tiene y abrir la
+	   primera con problemas: si no, los avisos de la pestaña oculta no se verían. */
+	(function marcarPestanasConErrores() {
+		var paneles = [
+			{ panel: 'panel-personales', tab: 'tab-personales' },
+			{ panel: 'panel-credito',    tab: 'tab-credito' }
+		];
+		var primeraConError = null;
+		for (var i = 0; i < paneles.length; i++) {
+			var panel = document.getElementById(paneles[i].panel);
+			var tab = document.getElementById(paneles[i].tab);
+			if (panel && tab && panel.querySelector('.error')) {
+				tab.classList.add('con-error');
+				if (!primeraConError) primeraConError = paneles[i];
+			}
+		}
+		if (primeraConError) {
+			mostrarPestana(primeraConError.panel, document.getElementById(primeraConError.tab));
+		}
+	})();
 </script>
 
 </body>

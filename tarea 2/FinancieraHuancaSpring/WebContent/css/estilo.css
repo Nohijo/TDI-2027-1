@@ -75,6 +75,17 @@ body {
     font-weight: bold;
 }
 
+/* Pestana que quedo con avisos de validacion */
+.tab.con-error {
+    color: #a03025;
+    font-weight: bold;
+}
+
+.tab.con-error::after {
+    content: " \2022";
+    color: #c0392b;
+}
+
 /* ---- Paneles ---- */
 .panel {
     display: none;
