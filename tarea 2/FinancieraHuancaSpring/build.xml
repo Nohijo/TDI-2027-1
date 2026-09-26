@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- Script de Ant del proyecto. NetBeans genera nbproject/build-impl.xml
-     a partir de nbproject/project.xml y este archivo lo importa. -->
-<project name="FinancieraHuancaSpring" default="default" basedir=".">
-    <description>Builds, tests, and runs the project FinancieraHuancaSpring.</description>
-    <import file="nbproject/build-impl.xml"/>
-</project>

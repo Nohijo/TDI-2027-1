@@ -18,7 +18,7 @@ Trabajos de la materia: prácticas y tareas.
 - Spring Framework (Spring MVC)
 - Apache Tomcat
 - MySQL
-- NetBeans
+- NetBeans y Eclipse
 
 Cada proyecto tiene su propio README con las instrucciones para correrlo.
 

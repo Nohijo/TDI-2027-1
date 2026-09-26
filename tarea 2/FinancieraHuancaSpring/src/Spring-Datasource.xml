@@ -1,0 +1,22 @@
+<beans xmlns="http://www.springframework.org/schema/beans"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-2.5.xsd">
+
+    <!-- Tarea 2 - Tecnologias para Desarrollos en Internet.
+         Los datos de conexion no van escritos aqui, sino en
+         servicio.properties, igual que en el ejemplo de clase. -->
+
+    <bean
+       class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+       <property name="location">
+          <value>servicio.properties</value>
+       </property>
+    </bean>
+
+    <bean id="servicioPropiedades" class="dominio.BDMySql">
+      <property name="urlBD" value="${urlBD}"> </property>
+      <property name="user" value="${user}"> </property>
+      <property name="password" value="${password}"> </property>
+    </bean>
+</beans>
