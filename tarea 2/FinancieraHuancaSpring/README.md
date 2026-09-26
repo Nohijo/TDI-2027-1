@@ -21,7 +21,7 @@ Las mismas del ejemplo de clase:
 - **Base de datos:** MySQL Server 8.0
 - **Conector JDBC:** `mysql-connector-java-8.0.18.jar`
 - **Vistas:** JSP con las etiquetas `<form:...>` de Spring y JSTL 1.2
-- **Eclipse** (*Dynamic Web Project*)
+- **Eclipse IDE for Enterprise Java and Web Developers 2025-06** (*Dynamic Web Project*)
 
 Los `.jar` van en `WebContent/WEB-INF/lib/`, así que el proyecto compila sin
 descargar nada.
@@ -46,12 +46,17 @@ se ajusta en `src/servicio.properties`.
 
 ### En Eclipse
 
-1. *File ▸ Import ▸ General ▸ Existing Projects into Workspace* y elige la
+1. Registrar el servidor una sola vez: *Window ▸ Preferences ▸ Server ▸
+   Runtime Environments ▸ Add ▸ Apache Tomcat v9.0*, apuntando a la carpeta de
+   Tomcat 9. Conviene dejarle de nombre **`apache-tomcat-9.0.100`**: es el
+   nombre que trae el `.classpath`, y así el proyecto resuelve las librerías
+   del servidor sin tocar nada.
+2. *File ▸ Import ▸ General ▸ Existing Projects into Workspace* y elegir la
    carpeta `FinancieraHuancaSpring`.
-2. Clic derecho en el proyecto ▸ *Properties ▸ Targeted Runtimes* y marca tu
-   Tomcat (9 o 7).
-3. Clic derecho ▸ *Run As ▸ Run on Server*.
-4. Abrir <http://localhost:8080/FinancieraHuancaSpring/>
+3. Si el servidor quedó con otro nombre: clic derecho en el proyecto ▸
+   *Properties ▸ Targeted Runtimes* y marcar el Tomcat instalado.
+4. Clic derecho ▸ *Run As ▸ Run on Server*.
+5. Abrir <http://localhost:8080/FinancieraHuancaSpring/>
 
 ## Estructura
 
