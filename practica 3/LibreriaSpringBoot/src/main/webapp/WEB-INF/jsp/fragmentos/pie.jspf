@@ -1,0 +1,12 @@
+<%@ page pageEncoding="UTF-8" %>
+<%-- Pie de pagina y scripts: primero las librerias, al final los propios. --%>
+<footer class="pie-libreria mt-auto py-3 text-center">
+    <small><spring:message code="app.pie" /></small>
+</footer>
+
+<script src="${ctx}/vendor/jquery/jquery.js"></script>
+<script src="${ctx}/vendor/jquery/jquery.validate.js"></script>
+<script src="${ctx}/vendor/bootstrap/bootstrap.bundle.min.js"></script>
+<script src="${ctx}/js/libreria.js"></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<%@ page pageEncoding="UTF-8" %>
+<%-- Inicio del documento y barra de navegacion con el selector de idioma. --%>
+<spring:message code="app.lang" var="idioma" />
+<!DOCTYPE html>
+<html lang="${idioma}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title><spring:message code="app.titulo" /></title>
+    <link rel="stylesheet" href="${ctx}/vendor/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="${ctx}/css/libreria.css">
+</head>
+<body class="d-flex flex-column min-vh-100">
+
+<nav class="navbar navbar-expand-sm navbar-dark barra-libreria">
+    <div class="container">
+        <a class="navbar-brand" href="${ctx}/libros">&#128218; <spring:message code="app.titulo" /></a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu"
+                aria-controls="menu" aria-expanded="false" aria-label="<spring:message code="nav.catalogo" />">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="menu">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="${ctx}/libros"><spring:message code="nav.catalogo" /></a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="menuIdioma" role="button"
+                       data-bs-toggle="dropdown" aria-expanded="false"><spring:message code="nav.idioma" /></a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="menuIdioma">
+                        <li><a class="dropdown-item ${idioma == 'en' ? '' : 'active'}" href="${ctx}/libros?lang=es_MX"><spring:message code="idioma.es" /></a></li>
+                        <li><a class="dropdown-item ${idioma == 'en' ? 'active' : ''}" href="${ctx}/libros?lang=en"><spring:message code="idioma.en" /></a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

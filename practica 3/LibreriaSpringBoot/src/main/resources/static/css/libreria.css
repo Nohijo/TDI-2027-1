@@ -1,0 +1,65 @@
+/*
+ * Practica 3 - Tecnologias para Desarrollos en Internet.
+ * Bootstrap hace la maquetacion; aqui solo va la paleta de la Practica 2.
+ */
+
+:root {
+    --vino: #6b1f2a;
+    --vino-oscuro: #4a1520;
+    --dorado: #c9a44c;
+    --crema: #faf6ee;
+}
+
+body {
+    background-color: var(--crema);
+}
+
+.barra-libreria {
+    background-color: var(--vino);
+    border-bottom: 3px solid var(--dorado);
+}
+
+.pie-libreria {
+    background-color: var(--vino-oscuro);
+    color: var(--crema);
+}
+
+.btn-primary {
+    background-color: var(--vino);
+    border-color: var(--vino);
+}
+
+.btn-primary:hover,
+.btn-primary:focus,
+.btn-primary:active {
+    background-color: var(--vino-oscuro);
+    border-color: var(--vino-oscuro);
+}
+
+.btn-outline-primary {
+    color: var(--vino);
+    border-color: var(--vino);
+}
+
+.btn-outline-primary:hover,
+.btn-outline-primary:focus,
+.btn-outline-primary:active {
+    background-color: var(--vino);
+    border-color: var(--vino);
+    color: #fff;
+}
+
+.dropdown-item.active,
+.dropdown-item:active {
+    background-color: var(--vino);
+}
+
+.enlace-orden {
+    color: inherit;
+    text-decoration: none;
+}
+
+.enlace-orden:hover {
+    color: var(--vino);
+    text-decoration: underline;
+}
